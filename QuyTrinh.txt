@@ -1,0 +1,18 @@
+Quy trình: 
+   1. Phân tích giao diện website
+   2. Phân tích thiết kế Database
+   3. Xây dựng cấu trúc folder,file cho project
+   4. Xây dựng trang quản trị website(Admin Page)
+      + Chuẩn bị giao diện Admin: lấy mẫu từ admin template bootstrap
+      + Ghép giao diện Admin vào hệ thống floder file đã xây dựng
+      + Phân tích các module trong Admin
+      + Ghép giao diện tương ứng với các module đã phân tích
+      + Code các chức năng của các Module(Có tương tác vs Database)
+   5.Trang dành cho người dùng(Front-end)
+   6.Kiểm thử Test và xử lý lỗi
+      + Chuẩn bị giao diện cho người dùng
+      + Phân tích Module cần xây dựng
+      + Ghép giao diện vào hệ thống file, folder đã xây dựng
+      + Code các chức năng của module
+      + Tối ưu đường dẫn thân thiện(URL Friendly bằng .htaccess và Router)
+   7.Publish web lên Hosting/VPS,có tên miền riêng

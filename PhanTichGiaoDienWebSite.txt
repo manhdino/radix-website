@@ -1,0 +1,46 @@
+1. Danh sách các chức năng:
+   + Hiển thị thông tin ở trang chủ:
+       + Quản lý bằng Options trong trang Admin
+       + Tất cả các thông tin mà khách hàng nhìn thấy thì ở trong
+       trang Admin đều phải có
+   + Trang tĩnh: 
+       + Trang About Us: hiển thị thông tin chi tiết về công ty
+       + Trang Our Team: hiển thị thông tin chi tiết các thành viên trong Team
+       + Trang Contact: hiển thị các thông tin liên hệ và form liên hệ
+       + Trang mặc định: hiển thị những nội dung đơn giản
+            + Hướng dẫn thanh toán
+            + Hướng dẫn mua hàng
+            + Điều khoản sử dụng
+            + Chính sách bảo mật
+            + Trang cảm ơn
+    + Dịch vụ(Service): 
+            + Danh sách dịch vụ: hiển thị danh sách các dịch vụ
+            + Chi tiết dịch vụ: hiển thị thông tin chi tiết của 1 dịch vụ
+    + Dự án(Portfolio):
+            + Danh mục dự án: hiển thị danh sách các danh mục dự án(Dưới dạng tab)
+            + Danh sách dự án: hiển thị danh sách các dự án(Phân chia theo chuyên mục)
+            + Chi tiết dự án: hiển thị thông tin chi tiết của 1 dự án
+    + Tin tức(Blog):
+            + Danh sách bài viết (blog): hiển thị danh sách các bài viết thuộc danh mục tin tức cụ thể
+            + Hiển thị danh sách tất cả bài viết(blog)
+            + Chi tiết bài viết: hiển thị thông tin của 1 bài viết,thông tin 
+            tiêu đề, nội dung bài viết, thời gian đăng,danh mục, lượt xem,thông tin về tác giả,
+            danh sách các bình luận và form bình luận và danh sách các bài viết liên quan
+    + Thông tin khác: 
+            + thông tin ở header, footer
+            + form subcribe(lưu thông tin vào trong Database)
+    + Tìm kiếm: 
+            + Tìm kiếm các bài viết dựa vào từ khóa    
+2. Xác định các đối tượng cần quản lý(Dựa vào danh sách các chức năng để lên được đối tượng)
+    1. Options: Thiết lập các tùy biến tĩnh(Our Team,About Us)
+    2. Pages: quản lý các trang tĩnh mặc định
+    3. Contact: lưu trữ các thông tin của người gửi liên hệ
+    4. Service: lưu trữ các thông tin về dịch vụ
+    5. Portfolio: lưu trữ thông tin về về dự án 
+    6. Blog: lưu trữ thông tin về tin tức, Tìm kiếm ko có đối tượng quản lý mà dựa vào bài viết
+    7. Subcribe: lưu trữ thông tin người để lại email subcribe
+    8. Comment: lưu trữ các bình luận của khách hàng
+    9. Portfolio Categories: lưu trữ danh mục dự án
+    10.Blog Categories: lưu trữ danh mục tin tức
+ -> Có 10 đối tượng cần quản lý -> trong trang Admin có ít nhất là 10 modules
+ 

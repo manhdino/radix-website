@@ -1,0 +1,160 @@
++ Mỗi đối tượng sau khi phân tích giao diện website sẽ tương ứng vs 1 table
+trong CSDL
++ Tất cả các trường nên để cho phép null(trừ khóa chính) để sau này nếu có
+thay đổi gì thì chỉ cần thay đổi ở bên code PHP thôi ko cần thay đổi
+ở bên CSDL nữa
+
+1.Bảng Options:
+  + id(int-primary key id tự động tăng)
+  + key(varchar(100) null: cho phép null): khóa nhận biết giữa các Options
+  + value(text null): giá trị của Options
+  + name(varchar(200) null: Tên hiển thị trên giao diện HTML)
+    --> Một số loại Options: menu, sdt,email , thời gian làm việc, icon mạng xã hội
+    --> VD: key: tên ảnh(logo), value:link ảnh 
+
+2. Bảng Pages: quản lý các trang tĩnh mặc định
+  + id(int-primary key id tự động tăng)
+  + title(varchar(200) null): tên trang tĩnh(tiêu đề trang)
+  + slug(varchar(200) null): đường dẫn tĩnh của trang, viết lại đường dẫn(URL) thật thành đường dẫn ảo, dựa vào
+  tiêu đề để,chuyển tất cả chữ hoa thành chữ thường, dấu cách thành
+  dấu gạch ngang
+    -->VD: https://www.anninhthudo.vn/kiem-tra-hoat-dong-cua-xe-uaz-cho-khach-du-lich-trong-pho-co-post552443.antd
+     Đây chính là slug: kiem-tra-hoat-dong-cua-xe-uaz-cho-khach-du-lich-trong-pho-co-post552443.antd
+  + content(text, null): nội dung của trang
+  + user_id(int default 0 khóa ngoại đến trường id bảng Users): id của quản trị viên(để xem trang này do ai đăng liên
+  vì sẽ có nhiều quản trị viên)
+  + created_at(datetime null): thời gian tạo trang  
+  + updated_at(datetime null): thời gian chỉnh sửa trang cuối cùng
+
+3. Bảng Contacts: lưu trữ thông tin người gửi liên hệ
+  + id(int-primary key,id tự động tăng)
+  + fullname(varchar(100) null): tên người gửi liên hệ
+  + email(varchar(100) null): email người gửi liên hệ
+  + type_id(int default: 0, là khóa ngoại(foreykey tới id bảng phòng ban)): id phòng ban liên hệ(sẽ có 1 bảng phòng ban riêng)
+  + message(text null): nội dung tin nhắn liên hệ 
+  + note(text null): ghi chú của người gửi liên hệ(dành cho quản trị viên)
+  + status(tiny int default: 0):Trạng thái xử lý(0: chưa xử lý, 1: đang xử lý, 2: đã xử lý)
+  + created_at(datetime null): thời gian gửi liên hệ
+  + updated_at(datetime null): thời gian chỉnh sửa liên hệ cuối cùng(do admin cập nhật trạng thái)
+  
+4.Bảng phòng ban(Contacts_Type): 
+  + id(int primary key, id tự động tăng)
+  + name(varchar(100) null): tên phòng ban
+  + created_at(datetime null): thời gian tạo phòng ban
+  + updated_at(datetime null): thời gian sửa phòng ban cuối cùng
+
+5.Bảng Services: 
+  + id(int primary key, id tự động tăng)
+  + name(varchar(200) null): tên Service
+  + icon(varchar(100) null): icon, ảnh của Service
+  + description(text null): mô tả ngắn về Service
+  + content(text null): nội dung chi tiết về dịch vụ
+  + user_id(int default: 0 khóa ngoại đến trường id bảng Users): id của quản trị viên
+  + slug(varchar(200) null): đường dẫn tĩnh(ảo) của Service khi xem trang chi tiết 
+  + created_at(datetime null): thời gian tạo Service
+  + updated_at(datetime null): thời gian sửa Service cuối cùng
+
+6.Portfolio_Categories: bảng lưu trữ thông tin về danh mục dự án
+   + id(int primary key, id tự động tăng)
+   + name(varchar(100) null): tên danh mục 
+   + user_id(int default: 0 khóa ngoại tới trường id của bảng Users): id của quản trị viên
+   + created_at(datetime null): thời gian tạo danh mục
+   + updated_at(datetime null): thời gian sửa danh mục cuối cùng
+
+7.Portfolio: bảng thông tin chi tiết 1 dự án
+   + id(int primary key, id tự động tăng)
+   + portfolio_categorie_id(int default:0 khóa ngoại tới trường id của bảng Portfolio_Categories): id danh mục dự án
+   + name(varchar(200) null): tên dự án
+   + slug(varchar(200) null): đường dẫn tĩnh của dự án
+   + thumbnail(varchar(100) null): ảnh đại diện mô tả của dự án khi xem danh sách dự án
+   + description(text null): mô tả ngắn của dự án
+   + video(varchar(100) null): link video youtube
+   + content(text null):Nội dung chi tiết của dự án
+   + user_id(int default: 0): id của quản trị viên
+   + created_at(datetime null): thời gian tạo dự án
+   + updated_at(datetime null): thời gian sửa dự án cuối cùng
+
+8.Portfolio_Image:(do trong 1 dự án sẽ phải có nhiều ảnh: quan hệ 1 - nhiều)
+   + id(int primary key, id tự động tăng)
+   + portfolio_id(int default:0 khóa ngoại tới id của bảng Portfolio): id của dự án được lấy từ bảng Portfolio
+   + images(varchar(150) null): link ảnh hoặc tên ảnh của dự án
+   + created_at(datetime null): thời gian thêm ảnh vào trong dự án
+   + updated_at(datetime null): thời gian sửa ảnh cuối cùng
+
+9.Blog_Categories: Chuyên mục bài viết(quan hệ 1 - nhiều: 1 chuyên mục sẽ có nhiều bài viết)
+   + id(int primary key, id tự động tăng)
+   + name(varchar(200) null): tên danh mục blog
+   + slug(varchar(200) null): đường dẫn tĩnh của blog
+   + user_id(int default: 0 khóa ngoại tới trường id của bảng Users): id của quản trị viên
+   + created_at(datetime null): thời gian tạo blog
+   + updated_at(datetime null): thời gian sửa blog cuối cùng
+
+10.Blog: (quan hệ nhiều nhiều: 1 bài Blog có thể nằm trong nhiều chuyên mục khác nhau)
+   + id(int primary key, id tự động tăng)
+   + title(varchar(200) null): tiêu đề bài viết Blog
+   + slug(varchar(200) null): đường dẫn tĩnh bài viết Blog
+   + categories_id(int default: 0 khóa ngoại tới id của bảng Blog_Categories)
+   + user_id(int default: 0 khóa ngoại tới trường id của bảng Users): id của quản trị viên
+   + content(text null): nội dung chi tiết bài viết Blog
+   + view_count(int default: 0): lượt xem của bài viết Blog
+   + thumbnail(varchar(100) null): chứa link ảnh bài viết Blog hoặc tên ảnh đại diện
+   + description(text null): mô tả ngắn của bài blog(hoặc là do admin tự viết) hoặc 
+   là lấy đoạn đầu của bài viết
+   + created_at(datetime null): thời gian tạo blog
+   + updated_at(datetime null): thời gian sửa blog cuối cùng
+
+11.Subcribe: 
+   + id(int primary key, id tự động tăng)
+   + fullname(varchar(100) null): họ tên người đăng kí nhận thông báo,tin tức sớm nhất 
+   + email(varchar(100) null): email người đăng kí 
+   + status(tiny int default: 0):Trạng thái xử lý(0: chưa xử lý, 1: đang xử lý, 2: đã xử lý)
+   + created_at(datetime null): thời gian đăng kí
+   + updated_at(datetime null): thời gian chỉnh sửa đăng kí cuối cùng
+
+12.Comments:
+   + id(int primary key, id tự động tăng)
+   + user_id(int default: 0 khóa ngoại tới trường id của bảng Users): user_id của quản trị viên(dùng cho chức năng trả lời comments)
+   + name(varchar(100) null): họ tên người gửi bình luận
+   + email(varchar(100) null): email người gửi bình luận
+   + content(text null): nội dung Comments của người gửi
+   + parent_id(int default: 0): id của comment cha, áp dụng để làm chức năng trả lời comment
+   + blog_id(int default: 0 khóa ngoại tới trường id của bảng Blog): id của bài viết Blog comment này sẽ phải thuộc 1 bài viết Blog nào đó
+   + created_at(datetime null): thời gian bình luận
+   + updated_at(datetime null): thời gian sửa bình luận cuối cùng(vì ko phải bình luận nào cx cho lên được mà phải cần chờ admin xét duyệt đồng ý)
+   + status(int default: 0): 0: chưa duyệt, 1: đã duyệt
+
+13.Users:
+   + id(int primary key, id tự động tăng)
+   + fullname(varchar(100) null): họ tên người quản trị viên(admin)
+   + email(varchar(100) null): email người quản trị
+   + password(varchar(100) null): password người quản trị viên
+   + about_content(text null): lời giới thiệu người quản trị viên, hiển thị khi
+   xem chi tiết bài viết Blog
+   + contact_facebook(varchar(100) null): link mạng xã hội facebook 
+   + contact_twitter(varchar(100) null): link mạng xã hội twitter 
+   + contact_linkedin(varchar(100) null): link mạng xã hội linkedin 
+   + contact_instagram(varchar(100) null): link mạng xã hội instagram  
+   + forget_token(varchar(100) null): Token của chức năng quên mật khẩu
+   + group_id(int default 0 khóa ngoại tới bảng Groups): id của bảng Groups
+   + status(tinyint default: 0): trạng thái của quản trị viên(0: chưa kích hoạt,1: đã kích hoạt)
+   + lastActivity(datetime null): thời gian admin hoạt động cuối cùng
+   + created_at(datetime null): thời gian tạo tài khoản người quản trị
+   + updated_at(datetime null): thời gian sửa quản trị cuối cùng
+
+14.Login_tokens:
+   + id(int primary key, id tự động tăng)
+   + user_id(int default: 0 khóa ngoại tới trường id của bảng Users): id quản trị viên 
+   + token(varchar(100) null): token đăng nhập của quản trị viên
+   + created_at(datetime null): thời gian đăng nhập của quản trị viên
+
+15.Groups: dùng để phân quyền
+   + id(int primary key, id tự động tăng)
+   + name(varchar(100) null): tên nhóm người dùng
+   + user_id(int default: 0): id của admin
+   + permission(text null): nội dung phân quyền(chuỗi JSON)
+   + created_at(datetime null): thời gian tạo nhóm người dùng
+   + updated_at(datetime null): thời gian sửa nhóm người dùng cuối cùng
+
+
+
+
