@@ -6,9 +6,8 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 function layout($layoutName='header', $data = []){
-    echo 'layout func: '._WEB_PATH_TEMPLATE.'/layouts/'.$layoutName;
-    if (file_exists(_WEB_PATH_TEMPLATE.'/layouts/'.$layoutName.'.php')){
-        require_once _WEB_PATH_TEMPLATE.'/layouts/'.$layoutName.'.php';
+    if (file_exists(_WEB_PATH_ADMIN_TEMPLATE.'/layouts/'.$layoutName.'.php')){
+        require_once _WEB_PATH_ADMIN_TEMPLATE.'/layouts/'.$layoutName.'.php';
     }
 }
 
