@@ -29,7 +29,6 @@ if (!empty($_GET['action'])){
 }
 
 $path = 'modules/'.$module.'/'.$action.'.php';
-echo $path;
 if (file_exists($path)){
     require_once $path;
 }else{

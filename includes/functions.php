@@ -5,13 +5,18 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-function layout($layoutName='header', $data = []){
-    if (file_exists(_WEB_PATH_ADMIN_TEMPLATE.'/layouts/'.$layoutName.'.php')){
-        require_once _WEB_PATH_ADMIN_TEMPLATE.'/layouts/'.$layoutName.'.php';
+function layout($layoutName = 'header', $dir = '', $data = [])
+{
+    if (!empty($dir)) {
+        $dir = '/' . $dir;
+    }
+    if (file_exists(_WEB_PATH_TEMPLATE . $dir . '/layouts/' . $layoutName . '.php')) {
+        require_once _WEB_PATH_TEMPLATE . $dir . '/layouts/' . $layoutName . '.php';
     }
 }
 
-function sendMail($to, $subject, $content){
+function sendMail($to, $subject, $content)
+{
     //Create an instance; passing `true` enables exceptions
     $mail = new PHPMailer(true);
 
@@ -45,15 +50,15 @@ function sendMail($to, $subject, $content){
         );
 
         return $mail->send();
-
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
 
 //Kiểm tra phương thức POST
-function isPost(){
-    if ($_SERVER['REQUEST_METHOD']=='POST'){
+function isPost()
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         return true;
     }
 
@@ -61,8 +66,9 @@ function isPost(){
 }
 
 //Kiểm tra phương thức GET
-function isGet(){
-    if ($_SERVER['REQUEST_METHOD']=='GET'){
+function isGet()
+{
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     }
 
@@ -70,41 +76,39 @@ function isGet(){
 }
 
 //Lấy giá trị phương thức POST, GET
-function getBody(){
+function getBody()
+{
 
     $bodyArr = [];
 
-    if (isGet()){
+    if (isGet()) {
         //Xử lý chuỗi trước khi hiển thị ra
         //return $_GET;
         /*
          * Đọc key của mảng $_GET
          *
          * */
-        if (!empty($_GET)){
-            foreach ($_GET as $key=>$value){
+        if (!empty($_GET)) {
+            foreach ($_GET as $key => $value) {
                 $key = strip_tags($key);
-                if (is_array($value)){
+                if (is_array($value)) {
                     $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
-                }else{
+                } else {
                     $bodyArr[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
                 }
-
             }
         }
-
     }
 
-    if (isPost()){
-        if (!empty($_POST)){
-            foreach ($_POST as $key=>$value){
+    if (isPost()) {
+        if (!empty($_POST)) {
+            foreach ($_POST as $key => $value) {
                 $key = strip_tags($key);
-                if (is_array($value)){
+                if (is_array($value)) {
                     $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
-                }else{
+                } else {
                     $bodyArr[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
                 }
-
             }
         }
     }
@@ -113,62 +117,64 @@ function getBody(){
 }
 
 //Kiểm tra email
-function isEmail($email){
+function isEmail($email)
+{
     $checkEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
     return $checkEmail;
 }
 
 //Kiểm tra số nguyên
-function isNumberInt($number, $range=[]){
+function isNumberInt($number, $range = [])
+{
     /*
      * $range = ['min_range'=>1, 'max_range'=>20];
      *
      * */
-    if (!empty($range)){
-        $options = ['options'=>$range];
+    if (!empty($range)) {
+        $options = ['options' => $range];
         $checkNumber = filter_var($number, FILTER_VALIDATE_INT, $options);
-    }else{
+    } else {
         $checkNumber = filter_var($number, FILTER_VALIDATE_INT);
     }
 
     return $checkNumber;
-
 }
 
 //Kiểm tra số thực
-function isNumberFloat($number, $range=[]){
+function isNumberFloat($number, $range = [])
+{
     /*
      * $range = ['min_range'=>1, 'max_range'=>20];
      *
      * */
-    if (!empty($range)){
-        $options = ['options'=>$range];
+    if (!empty($range)) {
+        $options = ['options' => $range];
         $checkNumber = filter_var($number, FILTER_VALIDATE_FLOAT, $options);
-    }else{
+    } else {
         $checkNumber = filter_var($number, FILTER_VALIDATE_FLOAT);
     }
 
     return $checkNumber;
-
 }
 
 //Kiểm tra số điện thoại (0123456789 - Bắt đầu bằng số 0, nối tiếp là 9 số)
-function isPhone($phone){
+function isPhone($phone)
+{
 
     $checkFirstZero = false;
 
-    if ($phone[0]=='0'){
+    if ($phone[0] == '0') {
         $checkFirstZero = true;
         $phone = substr($phone, 1);
     }
 
     $checkNumberLast = false;
 
-    if (isNumberInt($phone) && strlen($phone)==9){
+    if (isNumberInt($phone) && strlen($phone) == 9) {
         $checkNumberLast = true;
     }
 
-    if ($checkFirstZero && $checkNumberLast){
+    if ($checkFirstZero && $checkNumberLast) {
         return true;
     }
 
@@ -176,42 +182,47 @@ function isPhone($phone){
 }
 
 //Hàm tạo thông báo
-function getMsg($msg, $type='success'){
-    if (!empty($msg)){
-    echo '<div class="alert alert-'.$type.'">';
-    echo $msg;
-    echo '</div>';
+function getMsg($msg, $type = 'success')
+{
+    if (!empty($msg)) {
+        echo '<div class="alert alert-' . $type . '">';
+        echo $msg;
+        echo '</div>';
     }
 }
 
 //Hàm chuyển hướng
-function redirect($path='index.php'){
+function redirect($path = 'index.php')
+{
     header("Location: $path");
     exit;
 }
 
 //Hàm thông báo lỗi
-function form_error($fieldName, $errors, $beforeHtml='', $afterHtml=''){
-    return (!empty($errors[$fieldName]))?$beforeHtml.reset($errors[$fieldName]).$afterHtml:null;
+function form_error($fieldName, $errors, $beforeHtml = '', $afterHtml = '')
+{
+    return (!empty($errors[$fieldName])) ? $beforeHtml . reset($errors[$fieldName]) . $afterHtml : null;
 }
 
 //Hàm hiển thị dữ liệu cũ
-function old($fieldName, $oldData, $default=null){
-    return (!empty($oldData[$fieldName]))?$oldData[$fieldName]:$default;
+function old($fieldName, $oldData, $default = null)
+{
+    return (!empty($oldData[$fieldName])) ? $oldData[$fieldName] : $default;
 }
 
 //Kiểm tra trạng thái đăng nhập
-function isLogin(){
+function isLogin()
+{
     $checkLogin = false;
-    if (getSession('loginToken')){
+    if (getSession('loginToken')) {
         $tokenLogin = getSession('loginToken');
 
         $queryToken = firstRaw("SELECT userId FROM login_token WHERE token='$tokenLogin'");
 
-        if (!empty($queryToken)){
+        if (!empty($queryToken)) {
             //$checkLogin = true;
             $checkLogin = $queryToken;
-        }else{
+        } else {
             removeSession('loginToken');
         }
     }
@@ -220,36 +231,56 @@ function isLogin(){
 }
 
 //Tự động xoá token login đếu đăng xuất
-function autoRemoveTokenLogin(){
+function autoRemoveTokenLogin()
+{
     $allUsers = getRaw("SELECT * FROM users WHERE status=1");
 
-    if (!empty($allUsers)){
-        foreach ($allUsers as $user){
+    if (!empty($allUsers)) {
+        foreach ($allUsers as $user) {
             $now = date('Y-m-d H:i:s');
 
             $before = $user['lastActivity'];
 
-            $diff = strtotime($now)-strtotime($before);
-            $diff = floor($diff/60);
+            $diff = strtotime($now) - strtotime($before);
+            $diff = floor($diff / 60);
 
-            if ($diff>=1){
+            if ($diff >= 1) {
                 // delete('login_token', "userId=".$user['id']);
                 $table = 'login_token';
-                $conditions = 'userId='.$user['id'];
-                delete($table,$conditions);
+                $conditions = 'userId=' . $user['id'];
+                delete($table, $conditions);
             }
         }
     }
 }
 
 //Lưu lại thời gian cuối cùng hoạt động
-function saveActivity(){
+function saveActivity()
+{
     $userId = isLogin()['userId'];
-    update('users', ['lastActivity'=>date('Y-m-d H:i:s')], "id=$userId");
+    update('users', ['lastActivity' => date('Y-m-d H:i:s')], "id=$userId");
 }
 
 //Lấy thông tin user
-function getUserInfo($userId){
+function getUserInfo($userId)
+{
     $info = firstRaw("SELECT * FROM users WHERE id=$userId");
     return $info;
+}
+//Hàm active menu sidebar
+function activeMenuSidebar($module)
+{
+   if(!empty(getBody())){
+     if(getBody()['module'] == $module ){
+        return true;
+     }else{
+        return false;
+     }
+   }else{
+      if($module == ''){
+        return true;
+      }else{
+        return false;
+      }
+   }
 }
